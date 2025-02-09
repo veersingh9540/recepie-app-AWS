@@ -5,9 +5,15 @@ server {
         alias /vol/static;
     }
 
+    location /static {
+        alias /vol/media;
+    }
+
     location / {
-        uwsgi_pass              ${APP_HOST}:${APP_PORT};
-        include                 /etc/nginx/uwsgi_params;
+        include gunicorn_headers;
+        proxy_redirect off;
+        proxy_pass http://${APP_HOST}:${APP_PORT};
         client_max_body_size    10M;
     }
 }
+
